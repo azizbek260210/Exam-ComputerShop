@@ -5,70 +5,37 @@
     <div style="width: 700px; display: flex; justify-content: end;">
 
         <div class="container">
-            <h2>Mahsulotlar ro`yxati</h2>
-            <ul class="product-list">
-                {% for product in products %}
-                    <li class="product">
-                        <div class="product-info">
-                            <a href="{% url 'product_detail' product.id %}">
-                                <span>{{ product.name }} - Narx: {{ product.price }}</span>
-                            </a>
-                            <div class="product-actions">
-                                <a class="btn btn-danger delete-link" href="{% url 'delete_product' product.id %}">O'chirish</a>
+            <h2>Kategoriyalar ro`yxati</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Harakatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ category.name }}</td>
+                        <td>
+                            <div class="category-actions">
+                                <a class="btn btn-danger delete-link" href="{% url 'category_delete' category.id %}">O'chirish</a>
+                            </div><br>
+                            <div class="category-actions">
+                                <a class="btn btn-primary" style="margin-left: 100px;" href="{% url 'category_update' category.id %}">Tahrirlash</a>
                             </div>
-                            <div class="product-actions">
-                                <a class="btn btn-primary" href="{% url 'update_product' product.id %}">Tahrirlash</a>
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <a href="{% url 'create_product' %}" class="add-link">Add Product</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <div>
+                    <a style="margin-left: 500px;" href="{% url 'category_create' %}" class="btn btn-success add-link">Kategoriya qo'shish +</a>
+                </div>
+            </table>
         </div>
     </div>
 </div>
-
-<style>
-    /* Product List styles */
-    .product-list {
-        padding-left: 0;
-        list-style-type: none;
-    }
-
-    .product {
-        margin-bottom: 20px;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-
-    .product-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .delete-link {
-        color: black;
-        margin-left: 10px;
-    }
-
-    .add-link {
-        display: inline-block;
-        margin-top: 20px;
-        background-color: #333;
-        color: #fff;
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        text-align: center;
-    }
-
-    .add-link:hover {
-        background-color: #555;
-    }
-</style>
 
 {% endblock %}

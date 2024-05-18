@@ -22,23 +22,19 @@ urlpatterns = [
     path('products/<int:id>/', views.product_detail, name='product_detail'),
 
     # Enter Product URLs
-    path('enter-products/', views.enter_product_list, name='enter_product_list'),
-    path('enter-products/create/', views.create_enter_product, name='create_enter_product'),
-    path('enter-products/<int:id>/', views.enter_product_detail, name='enter_product_detail'),
+    path('enter-products/', views.enter_list, name='enter_list'),
+    path('enter-products/create/', views.create_enter, name='create_enter'),
+    path('enter-products/<int:id>/', views.enter_detail, name='enter_detail'),
 
     # Sell Product URLs
-    path('sell-products/', views.sell_product_list, name='sell_product_list'),
-    path('sell-products/create/', views.sell_product_create, name='sell_product_create'),
-    path('sell-products/update/<int:id>/', views.sell_product_update, name='sell_product_update'),
-    path('sell-products/<int:id>/', views.sell_product_detail, name='sell_product_detail'),
+    path('sell-products/', views.out_list, name='out_list'),
+    path('sell-products/create/', views.out_create, name='out_create'),
+    path('sell-products/update/<int:id>/', views.out_update, name='out_update'),
+    path('sell-products/<int:id>/', views.out_detail, name='out_detail'),
 
     # Refund URLs
     path('refunds/', views.refund_list, name='refund_list'),
     path('refunds/<int:id>/', views.refund_detail, name='refund_detail'),
     path('refund/<int:id>/', views.refund, name='refund'),
-
-    # Filter URLs
-    path('filter/', views.filter, name='filter'),
-    path('filter/entries/', views.filter_entries, name='filter_entries'),
 ]
 

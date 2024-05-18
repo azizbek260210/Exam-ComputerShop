@@ -1,86 +1,79 @@
-{% extends 'base.html' %}
+{% extends 'dashboard/base.html' %}
 {% load static %}
 {% block content %}
-<div class="pc-container">
-    <div class="pcoded-content">
-        <div class="page-header">
-            <div class="page-block">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <div class="page-header-title">
-                            <h5 class="m-b-10">Dashboard</h5>
-                        </div>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Bosh sahifa</a></li>
-                            <li class="breadcrumb-item">Maxsulotlar ro'yxati</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+<div style="width: 1000px; margin-left: 300px;">
+    <div class="col-md-6">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Dashboard</h5>
         </div>
-        <div class="row">
-            <div class="col">
-                <form method="get" action="{% url 'product_list' %}">
-                    <select name="category_code">
-                        <option value="">Kategoriyani tanlang</option>
-                        {% for category in categories %}
-                        <option value="{{ category.code }}" {% if category_code == category.code %}selected{% endif %}>{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="text" name="name" placeholder="Mahsulot nomi ..." value="{{ request.GET.name }}">
-                    <input type="date" name="start_date" value="{{ request.GET.start_date }}">
-                    <input type="date" name="end_date" value="{{ request.GET.end_date }}">
-                    <button type="submit">Filterlash</button>
-                </form>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Bosh sahifa</a></li>
+                <li class="breadcrumb-item">Maxsulotlar ro'yxati</li>
+            </ul>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="get" action="{% url 'product_list' %}">
+              <div class="row">
+                <select class="form-control" style="width: 180px;" name="category_id">
+                    <option value="">Kategoriyani tanlang</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category_id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                <input class="form-control" style="width: 180px; margin-left: 10px;" type="text" name="name" placeholder="Mahsulot nomi ..." value="{{ request.GET.name }}">
+                <input class="form-control" style="width: 180px; margin-left: 10px;" type="date" name="start_date" value="{{ request.GET.start_date }}">
+                <input class="form-control" style="width: 180px; margin-left: 10px;" type="date" name="end_date" value="{{ request.GET.end_date }}">
+                <button style="width: 180px; margin-left: 10px;" class="btn btn-primary" type="submit">Filterlash</button>
+            </div>
+            </form><br>
                 
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Maxsulot nomi</th>
-                            <th>Narxi</th>
-                            <th>Kategoriyasi</th>
-                            <th>Harakatlar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for product in products %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.price }}</td>
-                            <td>{{ product.category.name }}</td>
-                            <td>
-                                <a href="{% url 'product_update' product.id %}" style="margin-right: 10px;"><i class="fa fa-edit"></i></a>
-                                <bottom>
-                                    <a href="#" data-toggle="modal" data-target="#deleteModal{{ product.id }}"><i class="fa fa-trash"></i></a>
-                                </bottom>
-                            
-                                <div class="modal fade" id="deleteModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Mahsulotni o'chirish</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Mahsulotni o'chirmoqchimisiz?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiqish</button>
-                                                <a href="{% url 'product_delete' product.code %}" class="btn btn-danger"><b>O'chirish</b></a>
-                                            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Maxsulot nomi</th>
+                        <th>Narxi</th>
+                        <th>Kategoriyasi</th>
+                        <th>Harakatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.category.name }}</td>
+                        <td>
+                            <a href="{% url 'update_product' product.id %}" style="margin-right: 10px;"><i class="fa fa-edit"></i></a>
+                            <bottom>
+                                <a href="#" data-toggle="modal" data-target="#deleteModal{{ product.id }}"><i class="fa fa-trash"></i></a>
+                            </bottom>                    
+                            <div class="modal fade" id="deleteModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Mahsulotni o'chirish</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Mahsulotni o'chirmoqchimisiz?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiqish</button>
+                                            <a href="{% url 'delete_product' product.id %}" class="btn btn-danger"><b>O'chirish</b></a>
                                         </div>
                                     </div>
-                                </div>  
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                                </div>
+                            </div>  
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

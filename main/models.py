@@ -21,7 +21,6 @@ class Product(models.Model):
     qr_code = models.ImageField(blank=True, upload_to="media/qr_codes")
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
         url = (
             f'Maxsulot nomi: {self.name}\n'
             f'Maxsulot haqida: {self.description}\n'

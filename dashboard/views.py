@@ -92,7 +92,7 @@ def product_list(request):
         'categories': categories,
         'category_code': category_code,
     }
-    return render(request, 'product/list.html', context)
+    return render(request, 'dashboard/product/list.html', context)
     
 
 @login_required(login_url='log_in')
@@ -100,6 +100,7 @@ def delete_product(request, id):
     product = get_object_or_404(models.Product, id=id)
     product.delete()
     return redirect('product_list')
+
 
 @login_required(login_url='log_in')
 def update_product(request, id):
@@ -116,6 +117,7 @@ def update_product(request, id):
         return redirect('product_list')
     return render(request, 'dashboard/product/update.html', {'product': product, 'categories': categories})
 
+
 @login_required(login_url='log_in')
 def product_detail(request, id):
     product = get_object_or_404(models.Product, id=id)
@@ -124,89 +126,89 @@ def product_detail(request, id):
 # ---------ENTER PRODUCT-------------
 
 @login_required(login_url='log_in')
-def create_enter_product(request):
+def create_enter(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
         quantity = request.POST.get('quantity')
         product = get_object_or_404(models.Product, id=product_id)
         models.EnterProduct.objects.create(product=product, quantity=quantity)
-        return redirect('enter_product_list')
+        return redirect('enter_list')
     else:
         products = models.Product.objects.all()
-        return render(request, 'dashboard/enter_product/create.html', {'products': products})
+        return render(request, 'dashboard/enter/create.html', {'products': products})
 
 @login_required(login_url='log_in')
-def enter_product_detail(request, id):
-    enter_product = get_object_or_404(models.EnterProduct, id=id)
-    return render(request, 'dashboard/enter_product/detail.html', {'enter_product': enter_product})
+def enter_detail(request, id):
+    enter = get_object_or_404(models.EnterProduct, id=id)
+    return render(request, 'dashboard/enter/detail.html', {'enter': enter})
 
 @login_required(login_url='log_in')
-def enter_product_list(request):
+def enter_list(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
 
-    enter_products = models.EnterProduct.objects.all()
+    enters = models.EnterProduct.objects.all()
 
     if start_date and end_date:
-        enter_products = enter_products.filter(entered_at__range=[start_date, end_date])
+        enters = enters.filter(entered_at__range=[start_date, end_date])
 
-    return render(request, 'dashboard/enter_product/list.html', {'enter_products': enter_products})
+    return render(request, 'dashboard/enter/list.html', {'enters': enters})
 
 # ---------SELL PRODUCT-------------
 
 @login_required(login_url='log_in')
-def sell_product_list(request):
+def out_list(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
 
-    sell_products = models.SellProduct.objects.all()
+    outs = models.SellProduct.objects.all()
 
     if start_date and end_date:
-        sell_products = sell_products.filter(sold_at__range=[start_date, end_date])
+        outs = outs.filter(sold_at__range=[start_date, end_date])
 
-    return render(request, 'dashboard/sell_product/list.html', {'sell_products': sell_products})
-
-@login_required(login_url='log_in')
-def sell_product_detail(request, id):
-    sell_product = get_object_or_404(models.SellProduct, id=id)
-    return render(request, 'dashboard/sell_product/detail.html', {'sell_product': sell_product})
+    return render(request, 'dashboard/out/list.html', {'outs': outs})
 
 @login_required(login_url='log_in')
-def sell_product_create(request):
+def out_detail(request, id):
+    out = get_object_or_404(models.SellProduct, id=id)
+    return render(request, 'dashboard/out/detail.html', {'out': out})
+
+@login_required(login_url='log_in')
+def out_create(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
         quantity = request.POST.get('quantity')
         product = get_object_or_404(models.Product, id=product_id)
         models.SellProduct.objects.create(product=product, quantity=quantity)
-        return redirect('sell_product_list')
+        return redirect('out_list')
     else:
         products = models.Product.objects.all()
-        return render(request, 'dashboard/sell_product/create.html', {'products': products})
+        return render(request, 'dashboard/out/create.html', {'products': products})
 
 @login_required(login_url='log_in')
-def sell_product_update(request, id):
-    sell_product = get_object_or_404(models.SellProduct, id=id)
+def out_update(request, id):
+    out = get_object_or_404(models.SellProduct, id=id)
     if request.method == 'POST':
         product_id = request.POST.get('product')
         quantity = request.POST.get('quantity')
         refunded = request.POST.get('refunded', False)
-        sell_product.product_id = product_id
-        sell_product.quantity = quantity
-        sell_product.refunded = refunded
-        sell_product.save()
-        return redirect('sell_product_list')
-    return render(request, 'dashboard/sell_product/update.html', {'sell_product': sell_product})
+        out.product_id = product_id
+        out.quantity = quantity
+        out.refunded = refunded
+        out.save()
+        return redirect('out_list')
+    return render(request, 'dashboard/out/update.html', {'out': out})
 
 # ---------REFUND-------------
 
 @login_required(login_url='log_in')
 def refund(request, id):
-    sell_product = get_object_or_404(models.SellProduct, id=id)
-    if not sell_product.refunded:
-        if not models.Refund.objects.filter(sell_product=sell_product).exists():
-            models.Refund.objects.create(sell_product=sell_product)
-            sell_product.refunded = True
-            sell_product.save()
+    out = get_object_or_404(models.SellProduct, id=id)
+    if not out.refunded:
+        if not models.Refund.objects.filter(out=out).exists():
+            models.Refund.objects.create(out=out)
+            out.refunded = True
+            out.save()
             return HttpResponse("Mahsulot to`lovi muvaffaqiyatli qaytarildi.")
     return HttpResponse("Mahsulot allaqachon qaytarilgan.")
 
